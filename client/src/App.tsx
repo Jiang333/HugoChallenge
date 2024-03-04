@@ -136,7 +136,9 @@ function ApplicationForm() {
         }
     };
 
-    //There are some issues with error messages not appearing consistently.
+    /*There are some issues with error messages not appearing consistently.
+    Probably could split up the form into smaller components and setup a better UI/UX
+    */
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)}>
