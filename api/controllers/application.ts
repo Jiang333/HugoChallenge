@@ -49,7 +49,9 @@ export async function updateApplication(id, req) {
         /*
         Current iteration of cars on the policy is to remove cars that are no longer in the array of the profile
         This should cause issues if the partial data is given and the vehicle data is incomplete or empty as cars would
-        be deleted from the policy
+        be deleted from the policy.
+
+        Followup question on member could also be defined here.
         */
         const incomingVehicleIds = req.vehicles.map((vehicle) => vehicle.id);
 

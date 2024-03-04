@@ -228,7 +228,7 @@ function ApplicationForm() {
                 />
                 {errors.address?.zipCode && <p>{errors.address.zipCode.message}</p>}
                 <br />
-                {fields.map((field, index) => (
+                {fields.map((field, index) => ( // Same logic here could be utilized to create members for the challenge.
                     <div key={field.id}>
                         <h3>Vehicle {index + 1}</h3>
                         <div>
