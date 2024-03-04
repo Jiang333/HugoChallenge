@@ -27,12 +27,12 @@ model Address {
   state         String
   zipCode       String
   application   Application @relation(fields: [applicationId], references: [id])
-  applicationId Int @unique
+  applicationId Int         @unique
 }
 
 model Vehicle {
   id            Int         @id @default(autoincrement())
-  vin           String         //@unique should be unique
+  vin           String //@unique should be unique
   year          Int
   make          String
   model         String
@@ -41,11 +41,11 @@ model Vehicle {
 }
 
 model Members {
-  id           Int      @id @default(autoincrement())
-  firstName    String
-  lastName     String
-  dateOfBirth  DateTime
-  relationship String
+  id            Int         @id @default(autoincrement())
+  firstName     String
+  lastName      String
+  dateOfBirth   DateTime
+  relationship  String
   application   Application @relation(fields: [applicationId], references: [id])
   applicationId Int
 }

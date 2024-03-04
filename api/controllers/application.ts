@@ -1,25 +1,25 @@
 import db from '../db';
 
 export async function createApplication(req) {
-    console.log(req)
+    console.log(req);
     try {
         const application = await db.application.create({
             data: {
-            firstName: req.firstName,
-            lastName: req.lastName,
-            dateOfBirth: new Date(req.dateOfBirth),
-            address: {
-                create: req.address,
-            },
-            vehicles: {
-                create: req.vehicles,
-            },
+                firstName: req.firstName,
+                lastName: req.lastName,
+                dateOfBirth: new Date(req.dateOfBirth),
+                address: {
+                    create: req.address,
+                },
+                vehicles: {
+                    create: req.vehicles,
+                },
             },
         });
         console.log(application);
-        return application
+        return application;
     } catch (error) {
-       console.error(error);
+        console.error(error);
     }
 }
 
@@ -34,57 +34,65 @@ export async function updateApplication(id, req) {
 
         // Update address separately assumingreq.address has an ID
         if (req.address.id) {
-        const updatedAddress = await db.address.update({
-            where: { id: parseInt(req.address.id, 10) },
-            data: req.address,
-        });
-        }
-        else {
+            const updatedAddress = await db.address.update({
+                where: { id: parseInt(req.address.id, 10) },
+                data: req.address,
+            });
+        } else {
             updateData.address = {
-                update: req.address
-              };
+                update: req.address,
+            };
         }
         const currentVehicles = await db.vehicle.findMany({
             where: { applicationId: parseInt(id, 10) },
         });
-        const incomingVehicleIds = req.vehicles.map(vehicle => vehicle.id);
+        /*
+        Current iteration of cars on the policy is to remove cars that are no longer in the array of the profile
+        This should cause issues if the partial data is given and the vehicle data is incomplete or empty as cars would
+        be deleted from the policy
+        */
+        const incomingVehicleIds = req.vehicles.map((vehicle) => vehicle.id);
 
-        const vehiclesToUpdate = req.vehicles.filter(vehicle => vehicle.id && currentVehicles.some(v => v.id === vehicle.id));
-        const vehiclesToCreate = req.vehicles.filter(vehicle => !vehicle.id);
-        const vehiclesToDelete = currentVehicles.filter(vehicle => !incomingVehicleIds.includes(vehicle.id));
+        const vehiclesToUpdate = req.vehicles.filter(
+            (vehicle) => vehicle.id && currentVehicles.some((v) => v.id === vehicle.id)
+        );
+        const vehiclesToCreate = req.vehicles.filter((vehicle) => !vehicle.id);
+        const vehiclesToDelete = currentVehicles.filter(
+            (vehicle) => !incomingVehicleIds.includes(vehicle.id)
+        );
         // Update existing vehicles
         if (vehiclesToUpdate.length > 0) {
             // Loop through each vehicle to update and call 'update' for each
-            const updatePromises = vehiclesToUpdate.map(vehicle => {
-               return db.vehicle.update({
+            const updatePromises = vehiclesToUpdate.map((vehicle) => {
+                return db.vehicle.update({
                     where: { id: parseInt(vehicle.id, 10) },
-                 data: {
-                    vin: vehicle.vin,
-                   make: vehicle.make,
-                   model: vehicle.model,
-                   year: vehicle.year
-                 },
-               });
+                    data: {
+                        vin: vehicle.vin,
+                        make: vehicle.make,
+                        model: vehicle.model,
+                        year: vehicle.year,
+                    },
+                });
             });
-           
+
             // Wait for all update operations to complete
             await Promise.all(updatePromises);
         }
-        
+
         // Create new vehicles
         for (const vehicle of vehiclesToCreate) {
             await db.vehicle.create({
-               data: {
-                ...vehicle,
-                applicationId: parseInt(id, 10)
-               }
+                data: {
+                    ...vehicle,
+                    applicationId: parseInt(id, 10),
+                },
             });
-           }
-        
+        }
+
         // Delete vehicles not included in the request
         if (vehiclesToDelete.length > 0) {
             await db.vehicle.deleteMany({
-            where: { id: { in: vehiclesToDelete.map(vehicle => parseInt(vehicle.id, 10)) } },
+                where: { id: { in: vehiclesToDelete.map((vehicle) => parseInt(vehicle.id, 10)) } },
             });
         }
 
@@ -95,35 +103,34 @@ export async function updateApplication(id, req) {
         });
         const application = await db.application.findUnique({
             where: {
-                id: parseInt(id, 10)
+                id: parseInt(id, 10),
             },
             include: {
                 vehicles: true,
                 address: true,
             },
-        })
+        });
 
-    console.log(application);
-
+        console.log(application);
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
 }
 
 export async function findApplication(req) {
-    try{
+    try {
         const application = await db.application.findUnique({
             where: {
-                id: parseInt(req.params.id, 10)
+                id: parseInt(req.params.id, 10),
             },
             include: {
                 vehicles: true,
                 address: true,
             },
-        })
+        });
 
-    console.log(application);
-    return application
+        console.log(application);
+        return application;
     } catch (error) {
         console.error(error);
     }

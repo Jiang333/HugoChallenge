@@ -1,3 +1,4 @@
+/* utilties that don't fit being in the app file */
 export const states = [
     '',
     'AL',
@@ -59,7 +60,7 @@ export const states = [
     'WV',
     'WI',
     'WY',
-]
+];
 
-  export const api = 'http://localhost:8000'
-  export const currentYear = new Date().getFullYear();
+export const api = 'http://localhost:8000';
+export const currentYear = new Date().getFullYear();
