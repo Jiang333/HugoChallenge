@@ -218,12 +218,13 @@ function ApplicationForm() {
                 <label>Zipcode:</label>
                 <input
                     defaultValue=""
-                    {...register('address.zipCode', { required: 'Zipcode is required',
-                    pattern: {
-                        value: /^\d{5}$/, // Use regex to validate 5-digit numeric ZIP code
-                        message: 'Invalid ZIP code format'
-                      }
-                })}
+                    {...register('address.zipCode', {
+                        required: 'Zipcode is required',
+                        pattern: {
+                            value: /^\d{5}$/, // Use regex to validate 5-digit numeric ZIP code
+                            message: 'Invalid ZIP code format',
+                        },
+                    })}
                 />
                 {errors.address?.zipCode && <p>{errors.address.zipCode.message}</p>}
                 <br />
