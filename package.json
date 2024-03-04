@@ -1,0 +1,46 @@
+{
+    "name": "hugo-interview-challenge",
+    "version": "1.0.0",
+    "description": "Interview starter project for the Hugo take home project",
+    "scripts": {
+        "start:api": "nodemon --inspect --watch \"api/**/*\" --exec node --require @swc-node/register --require dotenv/config ./api/index.ts",
+        "start:client": "vite ./client",
+        "start": "concurrently --kill-others \"npm run start:api\" \"npm run start:client\"",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/popularlab/hugo-interview-challenge.git"
+    },
+    "author": "Hugo",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/popularlab/hugo-interview-challenge/issues"
+    },
+    "homepage": "https://github.com/popularlab/hugo-interview-challenge#readme",
+    "dependencies": {
+        "@prisma/client": "^5.10.2",
+        "axios": "^1.6.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-hook-form": "^7.51.0",
+        "react-router-dom": "^6.22.2"
+    },
+    "devDependencies": {
+        "@swc-node/register": "^1.6.8",
+        "@types/express": "^4.17.21",
+        "@types/node": "^20.10.4",
+        "@types/react": "^18.2.43",
+        "@types/react-dom": "^18.2.17",
+        "@vitejs/plugin-react": "^4.2.1",
+        "concurrently": "^8.2.2",
+        "nodemon": "^3.0.2",
+        "prettier": "^3.1.1",
+        "prisma": "^5.10.2",
+        "typescript": "^5.3.3",
+        "vite": "^5.0.8"
+    }
+}
